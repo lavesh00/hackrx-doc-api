@@ -1,10 +1,14 @@
+version: '3.8'
 services:
   api:
     build: .
-    container_name: hackrx-doc-api
     ports:
       - "8000:8000"
+    environment:
+      - GEMINI_API_KEY=${GEMINI_API_KEY}
+      - CHROMA_DIR=/data/chroma
+      - ANONYMIZED_TELEMETRY=false
+    volumes:
+      - ./data:/data
     env_file:
       - .env
-    volumes:
-      - ./data:/data        # keeps Chroma & SQLite persistent on local disk
