@@ -3,8 +3,15 @@ uvicorn[standard]==0.29.0
 python-multipart==0.0.9
 google-generativeai==0.5.1
 chromadb==1.0.5
-sentence-transformers==3.0.0
 pymupdf==1.24.4
 python-docx==1.2.0
 mail-parser==3.15.0
 pydantic==2.7.1
+
+# Install CPU-only PyTorch stack before sentence-transformers
+torch==2.2.2+cpu
+torchvision==0.17.2+cpu
+torchaudio==2.2.2+cpu
+-f https://download.pytorch.org/whl/torch_stable.html
+
+sentence-transformers==3.0.0
