@@ -1,3 +1,6 @@
+# MUST BE FIRST IMPORT - Before any chromadb imports
+import app.posthog_fix
+
 import os
 import logging
 from fastapi import FastAPI, UploadFile, File, HTTPException
@@ -43,7 +46,7 @@ async def startup_event():
     global LLM, VS, DP
     
     try:
-        logger.info("Initializing services...")
+        logger.info("🚀 Initializing services...")
         
         # Import services here to avoid import errors during module loading
         from app.llm_service import GeminiService
@@ -55,7 +58,7 @@ async def startup_event():
         VS = VectorStore(persist_path=os.getenv("CHROMA_DIR", "/data/chroma"))
         DP = DocumentProcessor(vector_store=VS)
         
-        logger.info("Services initialized successfully!")
+        logger.info("✅ Services initialized successfully!")
         
     except Exception as e:
         logger.error(f"Failed to initialize services: {str(e)}")

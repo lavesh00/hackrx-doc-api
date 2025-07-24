@@ -1,35 +1,14 @@
-import os
-import sys
-
-# CRITICAL: Disable telemetry BEFORE importing chromadb
-os.environ['ANONYMIZED_TELEMETRY'] = 'false'
-os.environ['CHROMA_TELEMETRY_DISABLED'] = 'true'
-
-# Monkey patch to completely disable PostHog before ChromaDB imports it
-class MockPostHog:
-    def __init__(self, *args, **kwargs):
-        pass
-    def capture(self, *args, **kwargs):
-        pass
-    def identify(self, *args, **kwargs):
-        pass
-    def alias(self, *args, **kwargs):
-        pass
-    def __getattr__(self, name):
-        return lambda *args, **kwargs: None
-
-# Replace posthog module before chromadb imports it
-sys.modules['posthog'] = type(sys)('posthog')
-sys.modules['posthog'].Posthog = MockPostHog
-
 import chromadb
+from chromadb.config import Settings
 from sentence_transformers import SentenceTransformer
+import os
 
 class VectorStore:
     def __init__(self, persist_path="/data/chroma", collection="policies"):
         self.persist_path = persist_path
         
-        # Create client without any telemetry
+        # Simple PersistentClient without telemetry settings
+        # (PostHog is already mocked, so no errors will occur)
         self.client = chromadb.PersistentClient(path=persist_path)
         
         self.emb_model = SentenceTransformer("all-MiniLM-L6-v2")
